@@ -1,23 +1,35 @@
-<!DOCTYPE html>
+<!doctype html>
+
 <html>
+
 <head>
-    <meta charset="utf-8">
-    <title>Hello World</title>
+
+  <meta charset="utf-8">
+  <title>Hello World</title>
+
 </head>
-<script src="pixi.js"/>
+
+<script src="pixi.js"></script>
+
 <body>
 
     <script type="text/javascript">
 
-        var type = "WebGL"
+        var type = "WebGL";
         if(!PIXI.utils.isWebGLSupported()){
-            type = "canvas"
+            type = "canvas";
         }
+        PIXI.utils.sayHello(type);
 
-        PIXI.utils.sayHello(type)
+        //Cria renderer e adiciona seu canvas no HTML.
+        var renderer = PIXI.autoDetectRenderer(256, 256, {antialias: false, transparent: false, resolution: 1});
+        document.body.appendChild(renderer.view);
+        //Cria um container e passa para o renderer
+        var stage = new PIXI.Container();
+        renderer.render(stage);
 
     </script>
-    
-    
+
 </body>
+
 </html>
