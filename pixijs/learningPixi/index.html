@@ -10,23 +10,105 @@
 </head>
 
 <script src="pixi.js"></script>
+<style>* {padding: 0; margin: 0}</style>
 
 <body>
 
     <script type="text/javascript">
 
+        //Alias
+        var
+        Container = PIXI.Container,
+        autoDetectRenderer = PIXI.autoDetectRenderer,
+        loader = PIXI.loader,
+        resources = PIXI.loader.resources,
+        Sprite = PIXI.Sprite;
+
+        //Hello world
+        /*
         var type = "WebGL";
         if(!PIXI.utils.isWebGLSupported()){
             type = "canvas";
         }
         PIXI.utils.sayHello(type);
+        */
 
         //Cria renderer e adiciona seu canvas no HTML.
-        var renderer = PIXI.autoDetectRenderer(256, 256, {antialias: false, transparent: false, resolution: 1});
+        var renderer = autoDetectRenderer(256, 256, {antialias: false, transparent: false, resolution: 1});
         document.body.appendChild(renderer.view);
         //Cria um container e passa para o renderer
-        var stage = new PIXI.Container();
+        var stage = new Container();
         renderer.render(stage);
+
+        //Alterando o canvas... Lembrar que alterar o tamanho do stage altera a área dos objetos criados, não o canvas.
+        /*
+        renderer.view.style.border = "1px dashed black";
+        renderer.backgroundColor = 0x061639;
+        renderer.autoResize = true;
+        renderer.resize(512, 512);
+        */
+
+        //Ocupando a tela toda.
+        renderer.view.style.position = "absolute";
+        renderer.view.style.display = "block";
+        renderer.autoResize = true;
+        renderer.resize(window.innerWidth, window.innerHeight);
+
+        //Para escalonamento proporcional, ver scaleToWindow
+        //https://github.com/kittykatattack/scaleToWindow
+
+        //Carregando imagens, transformando em texturas, recuperando sprites das texturas e por aí vai...
+
+        var imagePath = "images/cat.png";
+
+        //Irá executar quando terminar de carregar a imagem.
+        function setupCat() {
+
+            var cat = new Sprite(resources[imagePath].texture);
+
+            cat.x = 96;
+            cat.y = 96;
+
+            stage.addChild(cat);
+            renderer.render(stage);
+
+            //Para esconder a sprite, remover com stage.removeChild(sprite) ou sprite.visible = false             
+        }        
+        loader.add(imagePath).load(setupCat);
+
+        //Mais sobre carregamento de resources.
+        
+        //Utilizando uma imagem JS
+        /*
+        var base = new PIXI.BaseTexture(anyImageObject),
+        texture = new PIXI.Texture(base),
+        sprite = new PIXI.Sprite(texture);
+        */
+
+        //Utilizando uma imagem que está no canvas.
+        //var base = new PIXI.BaseTexture.fromCanvas(anyCanvasElement),
+
+        //Alterar a textura que a sprite está mostrando
+        //anySprite.texture = PIXI.utils.TextureCache["anyTexture.png"];
+
+        //Dando uma chave / nome para o resource que está sendo carregado, e dps acessá-lo como um objeto.
+        //PIXI.loader.add("catImage", "images/cat.png").load(setup);
+        //var cat = new PIXI.Sprite(PIXI.loader.resources.catImage.texture);
+
+        //Loader pode exibir o progresso, é executado uma vez para cada recurso carregado.
+        /*
+        PIXI.loader.on("progress", loadProgressHandler);
+        function loadProgressHandler(loader, resource) { 
+            console.log("loading " + resources.url + ", progress " + loader.progress + "%"); 
+        }
+        */
+        
+        //Outras propriedades do objeto resource: error e data.        
+        //add recebe além do name e url, um json com options e um callback.
+        //Para "reiniciar" um loader, use o .reset()
+
+        
+
 
     </script>
 
