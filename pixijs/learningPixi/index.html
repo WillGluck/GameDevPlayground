@@ -16,8 +16,12 @@
 
     <script type="text/javascript">
 
+        //ONDE - Creating sprites from a loaded texture atlas
+
         //Alias
         var
+        Rectangle = PIXI.Rectangle,
+        TextureCache = PIXI.TextureCache,
         Container = PIXI.Container,
         autoDetectRenderer = PIXI.autoDetectRenderer,
         loader = PIXI.loader,
@@ -59,22 +63,44 @@
 
         //Carregando imagens, transformando em texturas, recuperando sprites das texturas e por aí vai...
 
-        var imagePath = "images/cat.png";
+        var catPath = "images/cat.png";
+        var allPath = "images/tileset.png";
 
         //Irá executar quando terminar de carregar a imagem.
-        function setupCat() {
+        function setup() {
 
-            var cat = new Sprite(resources[imagePath].texture);
+            /*
+            var cat = new Sprite(resources[catPath].texture);
 
-            cat.x = 96;
-            cat.y = 96;
+            //cat.x = 96;
+            //cat.y = 96;
+            cat.position.set(96, 96);
+
+            cat.scale.set(0.5, 0.5);
+
+            cat.anchor.set(0.5, 0.5);
+            //cat.pivot.set(32, 32) Parecido com anchor, seta o ponto de origem. Se a imagem tem 64x64 o resultado é igual ao comando anterior.
+            cat.rotation = 0.5;
+            
 
             stage.addChild(cat);
+            renderer.render(stage);
+            */
+
+            var texture = TextureCache[allPath];
+            var rectangle = new Rectangle(192, 128, 64, 64);
+            texture.frame = rectangle;
+
+            var rocket = new Sprite(texture);
+            rocket.position.set(100, 100);
+
+            stage.addChild(rocket);            
             renderer.render(stage);
 
             //Para esconder a sprite, remover com stage.removeChild(sprite) ou sprite.visible = false             
         }        
-        loader.add(imagePath).load(setupCat);
+        loader.add(allPath).load(setup);
+        
 
         //Mais sobre carregamento de resources.
         
@@ -107,7 +133,7 @@
         //add recebe além do name e url, um json com options e um callback.
         //Para "reiniciar" um loader, use o .reset()
 
-        
+
 
 
     </script>
